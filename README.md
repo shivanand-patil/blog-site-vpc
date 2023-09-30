@@ -610,7 +610,7 @@ We disable the **Auto-assign public IP** because the PrivateInstance machine doe
 
 ### So, does the machine in our Border Subnet 'PublicInstance' will act as a NAT gateway?
 
-Simple answer: NO, नहीं, না, కాదు, இல்லை, ಇಲ್ಲ, ਨਹੀਂ , નહિં, नाही ഇല്ല
+Simple answer: NO, नहीं, না, కాదు, இல்லை, ಇಲ್ಲ, ਨਹੀਂ , નહિં, नाही, ഇല്ല
 
 To make this happen we need to make sure a few things are enabled and are in the right place.
 
@@ -683,7 +683,7 @@ Host 10.0.10.114
 ```
 
 
-**Replace the following values:**
+**Replace the following values (enter your machine IP addresses):**
 
 *   `34.214.170.91` with the public IP address of the PublicInstance machine.
     
@@ -756,7 +756,9 @@ To make it work we need to enable a source/destination check on your PublicInsta
 7.  Click **Save**.
     
 
-Now let's run the ping command on our PrivateInstance if it can access the Internet via NAT
+Now let's connect and run the ping command on our PrivateInstance if it can access the Internet via NAT
+
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1696055467374/bb7682aa-6a42-4372-b234-bfc23854fd8b.png)
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1696056531075/b04b1e15-d4fa-4ff8-947b-6acba3a2d67f.png?auto=compress,format&format=webp)
 
