@@ -22,7 +22,7 @@ With a VPC, you can have complete control over your virtual networking environme
 Getting started with a Virtual Private Cloud (VPC)
 --------------------------------------------------
 
-1.  Go to the AWS website and log in to your AWS account, and Click on the **Console** button in the top right corner of the page.
+1.  Go to the AWS website to log in to your AWS account, and Click on the **Console** button in the top right corner of the page.
     
     ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1695384645692/308c48ca-e1e2-4600-8ef0-e56a4335ed29.png?auto=compress,format&format=webp)
     
@@ -505,8 +505,8 @@ By adding a route to the App RT route table that routes all traffic to the Publi
 
 * * *
 
-**Create a Security Group for App Subnet**
-------------------------------------------
+**Create a Security Group for the App Subnet**
+----------------------------------------------
 
 To create a security group for the App subnet:
 
@@ -527,7 +527,7 @@ This will create a security group in your VPC.
 
 **Editing Inbound and Outbound Rules**
 
-Once you have created the App SG security group, you need to edit the inbound and outbound rules to allow HTTP and HTTPS traffic from anywhere.
+Once you have created the App SG security group, you need to edit the inbound and outbound rules to allow traffic.
 
 To edit the inbound rules:
 
@@ -537,17 +537,13 @@ To edit the inbound rules:
     
 3.  Under the **Inbound Rules** tab, click on the **Add Rule** button.
     
-4.  Under **Type**, select **HTTP**.
+4.  Under **Type**, select **All Traffic**.
     
 5.  Under **Source**, select **Anywhere**.
     
 6.  Click on the **Save** button.
     
-7.  Repeat steps 4-6 to add a rule for HTTPS, and All traffic.
-    
-8.  ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1695981464558/3879f95d-4b84-4159-a50d-4ddff76167dc.png?auto=compress,format&format=webp)
-    
-9.  Click **Save rules.**
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1696055193821/06036c8b-958b-4212-bcb2-15bc7f9c57f9.png?auto=compress,format&format=webp)
     
 
 Now, for outbound rules:
@@ -565,7 +561,7 @@ Now, for outbound rules:
 
 but but but but🍑, what did we just do???
 
-Now that you have created a security group for the App subnet and edited the inbound and outbound rules to allow HTTP and HTTPS traffic from anywhere, you can start launching application servers in the App subnet. The application servers will be able to receive HTTP and HTTPS traffic from anywhere on the internet.
+Now that you have created a security group for the App subnet and edited the inbound and outbound rules to allow traffic from anywhere, you can start launching application servers in the App subnet. The application servers will be able to receive traffic from anywhere on the internet.
 
 * * *
 
@@ -633,21 +629,21 @@ sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
 The first command enables IP forwarding on the PublicInstance machine. This allows the PublicInstance machine to forward traffic between its network interfaces.
 
-The second command creates a NAT rule that tells the PublicInstance machine to masquerade all outgoing traffic from its eth0 interface. This means that the PublicInstance machine will use its own public IP address for all outgoing traffic, regardless of the IP address of the device that originated the traffic.
+The second command creates a NAT rule that tells the PublicInstance machine to masquerade all outgoing traffic from its eth0 interface. This means that the PublicInstance machine will use its public IP address for all outgoing traffic, regardless of the IP address of the device that originated the traffic.
 
 **How does this make the PublicInstance machine a NAT gateway?**
 
-When a device in the App subnet sends traffic to the internet, the traffic is first routed to the PublicInstance machine. The PublicInstance machine then forwards the traffic to the internet using its own public IP address. The response traffic from the internet is routed back to the PublicInstance machine, which then forwards it to the device in the App subnet that originated the request.
+When a device in the App subnet sends traffic to the internet, the traffic is first routed to the PublicInstance machine. The PublicInstance machine then forwards the traffic to the internet using its public IP address. The response traffic from the internet is routed back to the PublicInstance machine, which then forwards it to the device in the App subnet that originated the request.
 
 **Why is this important?**
 
-NAT gateways allow multiple devices on a local network to share a single public IP address for outbound traffic. This is important because public IP addresses are a limited resource. By using a NAT gateway, multiple devices on a local network can access the internet without each device needing its own public IP address.
+NAT gateways allow multiple devices on a local network to share a single public IP address for outbound traffic. This is important because public IP addresses are a limited resource. By using a NAT gateway, multiple devices on a local network can access the internet without each device needing its public IP address.
 
 * * *
 
 Are we done now?
 
-Hmmmm, not yet. actually not done yet. You may ask "Bruhh Fr??? WHYYY?"
+Hmmmm, not yet. not done yet. You may ask "Bruhh frrr??? WHYYYYY?"
 
 because, To connect to the PrivateInstance machine using the PublicInstance machine, you need to edit your SSH configuration file. This file is located in the `.ssh` directory in your home directory.
 
@@ -671,13 +667,13 @@ Add the following two Host entries to the `config` file:
 
 ```
 Host PublicInstance
-  HostName 34.214.170.91
+  HostName 54.67.28.52
   ForwardAgent yes
   User ubuntu
   StrictHostKeyChecking no
   IdentityFile ~/.ssh/id_rsa
 
-Host 10.0.10.41
+Host 10.0.10.114
   ProxyCommand ssh -q -W %h:%p PublicInstance
   ForwardAgent yes
   StrictHostKeyChecking no
@@ -710,7 +706,7 @@ This command will use the SSH configuration file to connect to the PrivateInstan
 
 The Host entry for the PublicInstance machine is fairly straightforward. It specifies the hostname, username, and SSH private key file to use to connect to the PublicInstance machine.
 
-The Host entry for the PrivateInstance machine is a bit more complicated. It uses the ProxyCommand directive to specify that all SSH traffic to the PrivateInstance machine should be routed through the PublicInstance machine. The `-q` option to the `ssh` command tells the `ssh` client to suppress all output. The `-W %h:%p` option tells the `ssh` client to forward all traffic on the specified port to the specified host.
+The Host entry for the PrivateInstance machine is a bit more complicated. It uses the ProxyCommand directive to specify that all SSH traffic to the PrivateInstance machine should be routed through the PublicInstance machine. The `-q` option to the `ssh` command tells the `ssh` client to suppress all output. The `-W %h:%p` option tells the `SSH` client to forward all traffic on the specified port to the specified host.
 
 **Example**
 
@@ -726,6 +722,48 @@ This will prompt you to enter the SSH private key for the PublicInstance machine
 
 This process is called **_SSH hopping_**
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1695981057330/fe1a0660-20a3-4876-a192-f6b420dc325e.png?auto=compress,format&format=webp)
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1696055467374/bb7682aa-6a42-4372-b234-bfc23854fd8b.png?auto=compress,format&format=webp)
+
+You can see in the above image that through the magic of SSH hopping.
+
+we connected to our PrivateInstance, even though it had no public IP address.
 
 * * *
+
+VPC Final Boss
+--------------
+
+Can our PrivateInstance connect to the internet through our NAT gateway, which is our PublicInstance? Not yet. We can run commands like ping or apt-get update, but we won't see any results.
+
+To make it work we need to enable a source/destination check on your PublicInstance:
+
+1.  Go to the **Instances** page in the AWS Management Console.
+    
+2.  Select your PublicInstance.
+    
+3.  Click on **Actions**.
+    
+4.  From the drop-down menu, select **Network Settings**.
+    
+5.  Click on **Change source/destination check**.
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1696056336344/72e8b44e-c602-4489-a571-f0a3b2f483d6.png?auto=compress,format&format=webp)
+    
+6.  Select the **Stop** checkbox if it is unchecked from the pop-up window.
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1696056367734/2cc07926-b54d-426e-b126-37444f09b865.png?auto=compress,format&format=webp)
+    
+7.  Click **Save**.
+    
+
+Now let's run the ping command on our PrivateInstance if it can access the Internet via NAT
+
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1696056531075/b04b1e15-d4fa-4ff8-947b-6acba3a2d67f.png?auto=compress,format&format=webp)
+
+**Voilà, Boom, Huzzah, ¡Olé!, Bravo, C'est magnifique, Aha, Yippee, Fantástico, Kapow!**
+
+**WE DID ITT!!!!**
+
+We've done it! We can now access the internet from our private machines via NAT. Feeling like a tech genius? Feeling like a Cloud Genius? Feeling like LV Nilesh Ji? Hold your horses. What if I told you that you could automate the entire process using [Terraform](https://github.com/beacloudgenius/ntier), which would create all of these resources for you in minutes?
+
+Don't feel dumb. You've just learned the underlying concepts of cloud networking fundamentals, such as VPCs, subnets, route tables, and security groups. Even if you just completed the exercise and have a basic understanding of how things work, you've accomplished a lot. See you next blog!
