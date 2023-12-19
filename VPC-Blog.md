@@ -735,7 +735,7 @@ VPC Final Boss
 
 Can our PrivateInstance connect to the internet through our NAT gateway, which is our PublicInstance? Not yet. We can run commands like ping or apt-get update, but we won't see any results.
 
-To make it work we need to enable a source/destination check on your PublicInstance:
+To make it work we need to disable a source/destination check on your PublicInstance:
 
 1.  Go to the **Instances** page in the AWS Management Console.
     
