@@ -1,0 +1,534 @@
+<h1 id="create-a-vpc-from-scratch-set-up-your-own-nat-and-much-more-using-aws">Create a VPC from scratch, set up your own NAT and much more using AWS</h1>
+<h2 id="-what-the-heck-is-a-vpc-"><strong>What the heck is a VPC?</strong></h2>
+<p>Amazon Virtual Private Cloud (VPC) is a service that allows you to launch AWS resources in a logically isolated virtual network that you&#39;ve defined. This virtual network closely resembles a traditional network that you&#39;d operate in your own data center, with the benefits of using the scalable infrastructure of AWS.</p>
+<p>With a VPC, you can have complete control over your virtual networking environment, including:</p>
+<ul>
+<li><p>The IP address range of your VPC</p>
+</li>
+<li><p>The subnets within your VPC</p>
+</li>
+<li><p>The security groups that control inbound and outbound traffic to your VPC resources</p>
+</li>
+<li><p>The route tables control how traffic is routed within your VPC and to the internet</p>
+</li>
+</ul>
+<p><strong>NOTE: Assuming that you have an AWS account, let&#39;s get started with VPC!</strong></p>
+<hr>
+<h2 id="getting-started-with-a-virtual-private-cloud-vpc-">Getting started with a Virtual Private Cloud (VPC)</h2>
+<ol>
+<li><p>Go to the AWS website to log in to your AWS account, and Click on the <strong>Console</strong> button in the top right corner of the page.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695384645692/308c48ca-e1e2-4600-8ef0-e56a4335ed29.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Services</strong> tab in the top left corner of the page and make sure the selected region is &quot;Oregon&quot; (us-west-2) as we will be performing all the operations in the same region.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695384759520/19b4cd3b-e17e-46a1-9840-83ef172988d8.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>In the search bar, type &quot;VPC&quot; and then select the <strong>VPC</strong> service from the drop-down menu.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695384808619/cb78759e-dce4-49c8-a59a-bb31a66d2aab.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the &quot;Create VPC&quot; button</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695384934237/f1d424e3-0e2d-4805-9413-af438790a34e.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<hr>
+<h2 id="create-a-vpc">Create a VPC</h2>
+<p>Once you are on the VPC service page, click on the Create VPC button.</p>
+<ol>
+<li><p><strong>Select VPC only under resources to create.</strong></p>
+<p>This will create a VPC with the default resources, such as a default route table and a default security group.</p>
+</li>
+<li><p><strong>Give your own VPC name under the name tag.</strong></p>
+<p>This is a name that you will use to identify your VPC. It is a good idea to give your VPC a descriptive name so that you can easily find it later.</p>
+</li>
+<li><p><strong>Select IPv4 CIDR manual input under the IPv4 CIDR block option.</strong></p>
+<p>This will allow you to specify your own IPv4 CIDR block for your VPC.</p>
+</li>
+<li><p><strong>Give 10.0.0.0/16 in the input field.</strong></p>
+<p>This is the CIDR block that you will use for your VPC. It is a /16 CIDR block, which means that it contains 65,536 IP addresses.</p>
+</li>
+<li><p><strong>Click on the Create VPC button.</strong></p>
+<p>This will create your VPC.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695385820076/35b2fcbc-c4d1-4647-bb14-f50891a329bd.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<hr>
+<h2 id="create-subnets">Create Subnets</h2>
+<p>Before moving further we need to understand what is a subnet.</p>
+<p><strong>What is a subnet?</strong></p>
+<p>A subnet is a logical division of a VPC. It is a range of IP addresses that are carved out of the VPC&#39;s CIDR block. Subnets allow you to isolate resources within your VPC and control how they communicate with each other.</p>
+<p><strong>Creating a subnet</strong></p>
+<p>To create a subnet, follow these steps:</p>
+<ol>
+<li><p>Click on the <strong>Subnets</strong> tab on the left panel of the VPC dashboard.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695386437214/85144cc9-9323-4981-87bc-dd7111dea2a3.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Create Subnet</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695386507696/e02f45e5-20aa-4e88-ad0d-967852897a67.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Select the VPC that you created in the previous step.</p>
+</li>
+<li><p>Under <strong>Subnet settings</strong>, give your subnet a name, such as &quot;Border subnet&quot;.</p>
+</li>
+<li><p>Under the <strong>Availability zone</strong>, select the availability zone where you want to create the subnet.</p>
+</li>
+<li><p>Under <strong>IPv4 CIDR block</strong>, give the subnet a CIDR block. The CIDR block must be a subset of the VPC&#39;s CIDR block. In this example, we will use the CIDR block 10.0.0.0/24.</p>
+<p>In this example, we are creating a subnet with the CIDR block 10.0.0.0/24. This means that the subnet will have 256 IP addresses, from 10.0.0.0 to 10.0.0.255.</p>
+</li>
+<li><p>Click on the <strong>Create Subnet</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695386633482/228a5b42-284e-4cb3-8a1b-a28c248cc674.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<p>This will create a subnet in the selected availability zone with the specified CIDR block.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695386797364/6be15476-bd32-4021-b359-f52f37b2c113.png?auto=compress,format&amp;format=webp" alt=""></p>
+<hr>
+<h2 id="-create-a-route-table-for-the-border-subnet-and-editing-subnet-associations-"><strong>Create a Route Table for the Border Subnet and editing subnet associations</strong></h2>
+<p>but but but what is a routing/route table??</p>
+<p><strong>What is a routing/route table?</strong></p>
+<p>A routing table is a set of rules that determine how traffic is routed within a VPC. It contains a list of destinations (IP addresses or CIDR blocks) and the next-hop devices that should be used to reach those destinations.</p>
+<p><strong>Why do we need a route table?</strong></p>
+<p>A route table is necessary to route traffic within a VPC and to the internet. Without a route table, traffic would not be able to flow between different subnets within a VPC or to the internet.</p>
+<p><strong>Creating a route table</strong></p>
+<p>To create a route table, follow these steps:</p>
+<ol>
+<li><p>Click on the <strong>Route Tables</strong> tab on the left panel of the VPC dashboard.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695387313003/95d91283-1e5a-47d1-97b3-d727f498363a.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Create route table</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695387346802/f086e962-6ccb-496d-8e7a-d246d3b4ac12.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Under <strong>Route table settings</strong>, give your route table a name, such as &quot;Border RT&quot;.</p>
+</li>
+<li><p>Select the VPC that you created in the previous steps.</p>
+</li>
+<li><p>Click on the <strong>Create route table</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695387430956/49314edd-b99c-43fe-9d7c-9a2febf756d8.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<p>This will create a route table in the selected VPC. You can now add routes to the route table to control how traffic is routed within the VPC and to the internet.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695387468357/44e76bba-086c-48ab-a182-3dbc2170c252.png?auto=compress,format&amp;format=webp" alt=""></p>
+<ol>
+<li>To associate the &quot;Border RT&quot; route table to the border subnet under subnet associations, Under the <strong>Subnet associations</strong> tab, click</li>
+</ol>
+<p><strong>Edit subnet associations</strong>.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695387863064/edd9e9d4-4c46-435e-9e91-832357b68763.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p>Select the <strong>border subnet</strong> checkbox.</p>
+<p>Click <strong>Save Associations</strong>.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695387894074/ec15e436-f027-4318-b3ef-2e69a0e9c708.png?auto=compress,format&amp;format=webp" alt=""></p>
+<hr>
+<h2 id="create-an-internet-gateway">Create an Internet Gateway</h2>
+<p><strong>What is an internet gateway?</strong></p>
+<p>An internet gateway is a highly available device that allows you to connect your VPC to the internet. It provides a central egress point for internet traffic from your VPC.</p>
+<p><strong>Why do we need an internet gateway?</strong></p>
+<p>An internet gateway is necessary to allow resources in your VPC to access the internet. Without an internet gateway, resources in your VPC will not be able to access the internet.</p>
+<p><strong>Creating an Internet gateway</strong></p>
+<p>To create an internet gateway, follow these steps:</p>
+<ol>
+<li><p>Click on the <strong>Internet gateways</strong> tab on the left panel of the VPC dashboard.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695388374259/fb40f31d-2628-47da-a7d9-a9f65b97901e.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Create Internet Gateway</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695388408626/ffd395f0-67a2-45ee-830d-c41e43ea6f5b.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Under <strong>Internet gateway settings</strong>, give your Internet gateway a name, such as &quot;border GW&quot;.</p>
+</li>
+<li><p>Click on the <strong>Create Internet Gateway</strong> button.</p>
+</li>
+</ol>
+<p>This will create an internet gateway in your AWS account.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695388458259/f18cba9a-85e0-4195-a380-c341d970f5d0.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p><strong>Attaching the internet gateway to the VPC</strong></p>
+<p>To attach the internet gateway to the VPC, follow these steps:</p>
+<ol>
+<li><p>Go to the <strong>Internet gateways</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Select the <strong>border GW</strong> internet gateway.</p>
+</li>
+<li><p>Under the <strong>Actions</strong> menu, click <strong>Attach to VPC</strong>.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695388542156/7fb8d240-02d3-40b2-97d8-227361738fa2.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Select the VPC that you created in the previous steps.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695388572901/d0fa130d-3935-4a86-97b6-712d15041546.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click <strong>Attach Internet Gateway</strong>.</p>
+</li>
+</ol>
+<p>This will attach the &quot;border GW&quot; internet gateway to the VPC. Resources in the VPC will now be able to access the internet through the &quot;border GW&quot; internet gateway.</p>
+<p><strong>Note:</strong> Internet gateways that are created are detached by default. You must explicitly attach the internet gateway to the VPC before resources in the VPC can access the internet.</p>
+<hr>
+<h2 id="-create-a-security-group-for-the-border-subnet-"><strong>Create a Security Group for the Border Subnet</strong></h2>
+<p><strong>What is a security group?</strong></p>
+<p>A security group is a firewall that controls inbound and outbound traffic to the instances in your VPC. It acts as a virtual firewall for your instances, protecting them from unauthorized access.</p>
+<p><strong>What are inbound and outbound rules in a security group?</strong></p>
+<p>Inbound rules control which traffic can reach your instances, while outbound rules control which traffic can leave your instances.</p>
+<p><strong>Creating a security group</strong></p>
+<p>To create a security group, follow these steps:</p>
+<ol>
+<li><p>Click on the <strong>Security groups</strong> option under <strong>Security</strong> in the left panel of the VPC dashboard.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695389655017/b08b91d9-7203-4611-ba75-a3ec750c4396.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Create Security Group</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695389680939/89699675-1246-4389-a1cf-7a8c0df17cde.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Under <strong>Basic details</strong>, give your security group a name, such as &quot;Border SG&quot;.</p>
+</li>
+<li><p>Enter a proper description.</p>
+</li>
+<li><p>Under <strong>VPC</strong>, select the VPC that you created in the previous steps.</p>
+</li>
+<li><p>Click on the <strong>Create Security Group</strong> button.</p>
+</li>
+</ol>
+<p>This will create a security group in your VPC.</p>
+<p><strong>Editing inbound and outbound rules</strong></p>
+<p>To edit the inbound and outbound rules for the security group, follow these steps:</p>
+<ol>
+<li><p>Under the <strong>Inbound Rules</strong> tab, click on the <strong>Add Rule</strong> button.</p>
+</li>
+<li><p>Under <strong>Type</strong>, select <strong>SSH</strong>.</p>
+</li>
+<li><p>Under <strong>Source</strong>, select <strong>Anywhere</strong>.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695389895310/a2d9f425-4a19-468f-9106-6321f4a43d86.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<p>This will add a rule to the inbound rules of the security group that allows SSH traffic from anywhere.</p>
+<p>You can also add additional rules to the inbound and outbound rules of the security group, depending on your specific needs. For example, you could add a rule to the inbound rules that allows HTTP traffic from only specific IP addresses.</p>
+<p><strong>Important:</strong> It is important to configure the security groups in your VPC carefully to ensure that your instances are properly protected. Leaving the security groups open to too much traffic can increase the risk of attack.</p>
+<hr>
+<h2 id="-create-a-machine-inside-the-border-subnet-"><strong>Create a Machine Inside the Border Subnet</strong></h2>
+<p><strong>To create a machine inside the Border subnet:</strong></p>
+<ol>
+<li><p>In the AWS Management Console, search for <strong>EC2</strong> and select the <strong>EC2</strong> service.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695390891034/0a90fed8-40a7-41e0-a499-f6f9f41a09c9.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Launch Instance</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695390925285/d9ecbb39-7bd3-4c20-9897-c708c9051512.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Under Names and tags provide a name for the instance, in this example, it&#39;s &quot;PublicInstance&quot;.</p>
+</li>
+<li><p>Under <strong>Choose an Amazon Machine Image (AMI)</strong>, select the AMI for the Ubuntu operating system.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695391073410/63f2953f-1b0e-499d-89bf-f6432794400d.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Under <strong>Instance type</strong>, select the <strong>t2.micro</strong> instance type.</p>
+</li>
+<li><p>Under <strong>Key pair</strong>, select the key pair that you created in a previous step.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695391121328/40cc8af3-dfc7-4934-aba7-04ab6762bde7.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Under <strong>Network settings</strong>, select the VPC that you created in a previous step.</p>
+</li>
+<li><p>Under <strong>Subnet</strong>, select the Border subnet.</p>
+</li>
+<li><p>Under <strong>Security Groups</strong>, select the Border SG security group.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695391187508/72397ab0-9da2-4a7e-9ff7-649136c6907b.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Launch Instance</strong> button.</p>
+</li>
+</ol>
+<p>This will launch an EC2 instance in the Border subnet with the specified AMI, instance type, key pair, VPC, subnet, and security group.</p>
+<p><strong>Additional notes:</strong></p>
+<ul>
+<li><p><strong>Enable auto-assign public IP:</strong> This will assign a public IP address to your EC2 instance. This is necessary if you want to access your EC2 instance from the internet.</p>
+</li>
+<li><p><strong>Select existing security group:</strong> This allows you to select an existing security group to associate with your EC2 instance.</p>
+</li>
+<li><p><strong>Border SG:</strong> This is the security group that you created in a previous step.</p>
+</li>
+</ul>
+<p>Once the EC2 instance has launched, you can connect to it using the SSH protocol. To do this, you will need to use the SSH private key that you downloaded when you created the key pair.</p>
+<hr>
+<h2 id="-remotely-ssh-login-to-the-publicinstance-using-terminal-"><strong>Remotely SSH Login to the PublicInstance Using Terminal</strong></h2>
+<p>Before we remotely connect to our PublicInstance, we need to edit the route for Border RT, where the destination is 0.0.0.0/0 which is anywhere on the internet, target as border GW that we created in the previous steps and save changes:</p>
+<ol>
+<li><p>Go to the <strong>Route tables</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Select the <strong>Border RT</strong> route table.</p>
+</li>
+<li><p>Under the <strong>Routes</strong> tab, click on the <strong>Edit Routes</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695392730484/4ef8f6f3-aa33-4d8f-a112-b03eb784d32d.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click on the <strong>Add Route</strong> button.</p>
+</li>
+<li><p>Under <strong>Destination</strong>, enter <code>0.0.0.0/0</code>.</p>
+</li>
+<li><p>Under <strong>Target</strong>, select the <strong>border GW</strong> internet gateway.</p>
+</li>
+<li><p>Click on the <strong>Save</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695392786564/39cfbfea-d825-4a47-b751-5ac2cdfe4a86.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<p>Now, To remotely SSH log in to the PublicInstance using the terminal:</p>
+<ol>
+<li><p>Copy the public IP address of the PublicInstance machine. You can find the public IP address in the AWS Management Console by going to the EC2 service and selecting the PublicInstance instance.</p>
+</li>
+<li><p>Open a terminal window.</p>
+</li>
+<li><p>Run the following command, replacing <code>&lt;Public-IP-Address&gt;</code> with the public IP address of the PublicInstance machine:</p>
+</li>
+</ol>
+<pre><code><span class="hljs-selector-tag">ssh</span> <span class="hljs-selector-tag">ubuntu</span>@&lt;<span class="hljs-keyword">Public</span>-<span class="hljs-keyword">IP</span>-<span class="hljs-keyword">Address</span>&gt;
+</code></pre><p>You will be prompted to enter your SSH private key. Enter the SSH private key that you downloaded when you created the key pair.</p>
+<p>If the SSH connection is successful, you will be logged in to the PublicInstance machine.</p>
+<p><strong>Example:</strong></p>
+<pre><code><span class="hljs-selector-tag">ssh</span> <span class="hljs-selector-tag">ubuntu</span>@<span class="hljs-keyword">192</span>.<span class="hljs-keyword">168</span>.<span class="hljs-keyword">1</span>.<span class="hljs-keyword">100</span>
+</code></pre><p>This will log in to the PublicInstance machine with the public IP address 192.168.1.100.</p>
+<p>Once you are logged in to the PublicInstance machine, you can start using it like any other Linux machine. You can run commands, install software, and create files.</p>
+<p><strong>Important:</strong> Do not share your SSH private key with anyone else. Your SSH private key is the key to your EC2 instance. If someone else has your SSH private key, they will be able to log in to your EC2 instance and do anything they want.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695393397576/60ed5d8c-a540-472a-9295-2720279c536a.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695393430651/56555df8-3ac8-4190-a1e8-85cd2de3de96.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p>Do not worry about me exposing my public IP address of the instance, I have deleted all the resources :D</p>
+<hr>
+<h2 id="-half-the-work-done-now-it-s-time-to-create-a-private-subnet-"><strong>Half the work done: Now it&#39;s time to create a private subnet</strong></h2>
+<p>So far, we&#39;ve created a VPC with a public subnet and launched an ec2 machine which will act as a NAT gateway. This is a good start, but we&#39;re only halfway there. Now we need to create a private subnet for our application servers.</p>
+<h3 id="-why-do-we-need-a-private-subnet-"><strong>Why do we need a private subnet?</strong></h3>
+<p>We need a private subnet because we want to protect our application servers from direct access to the internet. By putting our application servers in a private subnet, we can use our NAT gateway to control all inbound and outbound traffic.</p>
+<p><strong>Creating a private subnet</strong></p>
+<p>To create a private subnet, follow these steps:</p>
+<ol>
+<li><p>Go to the VPC service in the AWS Management Console.</p>
+</li>
+<li><p>Under <strong>Resources</strong>, click on <strong>Subnets</strong>.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695386437214/85144cc9-9323-4981-87bc-dd7111dea2a3.png" alt=""></p>
+</li>
+<li><p>Click on the <strong>Create Subnet</strong> button.</p>
+<p>note: Make sure to create the subnet under the same VPC that we created earlier</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695386507696/e02f45e5-20aa-4e88-ad0d-967852897a67.png" alt=""></p>
+</li>
+<li><p>Give your subnet a name, such as <code>app subnet</code>.</p>
+</li>
+<li><p>Select the VPC that you created in a previous step.</p>
+</li>
+<li><p>Under <strong>Subnet settings</strong>, select the <strong>Availability Zone</strong> where you want to create the subnet.</p>
+</li>
+<li><p>Under <strong>IPv4 CIDR block</strong>, enter a CIDR block for your subnet. Make sure that the CIDR block is within the CIDR block of your VPC.</p>
+</li>
+<li><p>Click on the <strong>Create Subnet</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695972905309/f0a7886c-c475-4ffd-9e8e-ed7ce87ccb7e.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<p>This will create a private subnet in your VPC.</p>
+<hr>
+<h2 id="-creating-route-table-for-app-subnet-"><strong>Creating Route Table for App Subnet</strong></h2>
+<p>To create a route table for the App subnet:</p>
+<ol>
+<li><p>Go to the <strong>Route tables</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Click on the <strong>Create route table</strong> button.</p>
+</li>
+<li><p>Under <strong>Route table settings</strong>, give your route table a name, such as &quot;App RT&quot;.</p>
+</li>
+<li><p>Select the VPC that you created in a previous step.</p>
+</li>
+<li><p>Click on the <strong>Create route table</strong> button.</p>
+</li>
+</ol>
+<p>This will create a route table in your VPC.</p>
+<p><strong>Note:</strong> You can create multiple route tables in a VPC, but each subnet can only be associated with one route table.</p>
+<p><strong>Next steps:</strong></p>
+<p>Once you have created the App RT route table, you need to associate it with the App subnet. To do this, follow these steps:</p>
+<ol>
+<li><p>Go to the <strong>Route tables</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Select the <strong>App RT</strong> route table.</p>
+</li>
+<li><p>Under the <strong>Subnet Associations</strong> tab, click on <strong>Edit Subnet Associations</strong>.</p>
+</li>
+<li><p>Select the <strong>App subnet</strong> checkbox.</p>
+</li>
+<li><p>Click on the <strong>Save Associations</strong> button.</p>
+</li>
+</ol>
+<p>This will associate the App RT route table with the App subnet.</p>
+<h3 id="here-comes-the-interesting-part-hmm-">Here comes the interesting part hmm....</h3>
+<p><strong>To add a route to the App RT route table to route all traffic to the PublicInstance instance:</strong></p>
+<ol>
+<li><p>Go to the <strong>Route tables</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Select the <strong>App RT</strong> route table.</p>
+</li>
+<li><p>Under the <strong>Routes</strong> tab, click on the <strong>Edit Routes</strong> button.</p>
+</li>
+<li><p>Click on the <strong>Add Route</strong> button.</p>
+</li>
+<li><p>Under <strong>Destination</strong>, enter <code>0.0.0.0/0</code>.</p>
+</li>
+<li><p>Under <strong>Target</strong>, select the <strong>PublicInstance</strong> instance.</p>
+</li>
+<li><p>Click on the <strong>Save</strong> button.</p>
+</li>
+</ol>
+<p>This will add a route to the App RT route table that tells traffic to anywhere on the internet to go through the PublicInstance instance.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695974097992/52787cc4-3506-49c3-bd43-96d46cbcbe32.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p><strong>Why is this necessary?</strong></p>
+<p>The &#39;PublicInstance&#39; instance is acting as a NAT gateway for the App subnet. This means that all traffic from the App subnet to the internet must go through the PublicInstance instance.</p>
+<p>By adding a route to the App RT route table that routes all traffic to the PublicInstance instance, we are ensuring that all traffic from the App subnet to the internet is routed through the NAT gateway.</p>
+<p><strong>Important:</strong> If you do not add this route to the App RT route table, traffic from the App subnet to the internet will not be routed through the NAT gateway. This could pose a security risk, as resources in the App subnet would be directly exposed to the internet.</p>
+<hr>
+<h2 id="-create-a-security-group-for-the-app-subnet-"><strong>Create a Security Group for the App Subnet</strong></h2>
+<p>To create a security group for the App subnet:</p>
+<ol>
+<li><p>Go to the <strong>Security Groups</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Click on the <strong>Create Security Group</strong> button.</p>
+</li>
+<li><p>Under <strong>Basic details</strong>, give your security group a name, such as &quot;App SG&quot;.</p>
+</li>
+<li><p>Enter a proper description.</p>
+</li>
+<li><p>Under <strong>VPC</strong>, select the VPC that you created in a previous step.</p>
+</li>
+<li><p>Click on the <strong>Create Security Group</strong> button.</p>
+</li>
+</ol>
+<p>This will create a security group in your VPC.</p>
+<p><strong>Editing Inbound and Outbound Rules</strong></p>
+<p>Once you have created the App SG security group, you need to edit the inbound and outbound rules to allow traffic.</p>
+<p>To edit the inbound rules:</p>
+<ol>
+<li><p>Go to the <strong>Security Groups</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Select the <strong>App SG</strong> security group.</p>
+</li>
+<li><p>Under the <strong>Inbound Rules</strong> tab, click on the <strong>Add Rule</strong> button.</p>
+</li>
+<li><p>Under <strong>Type</strong>, select <strong>All Traffic</strong>.</p>
+</li>
+<li><p>Under <strong>Source</strong>, select <strong>Anywhere</strong>.</p>
+</li>
+<li><p>Click on the <strong>Save</strong> button.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1696055193821/06036c8b-958b-4212-bcb2-15bc7f9c57f9.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+</ol>
+<p>Now, for outbound rules:</p>
+<ol>
+<li><p>Go to the <strong>Security Groups</strong> page in the Amazon VPC console.</p>
+</li>
+<li><p>Select the <strong>App SG</strong> security group.</p>
+</li>
+<li><p>Under the <strong>Outbound rules</strong> tab, make sure that the following rule is selected.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695981353564/b7dc366c-9f4e-49e4-9bde-aa6fd5e0ad9f.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click <strong>save rules</strong>.</p>
+</li>
+</ol>
+<p>but but but but, what did we just do???</p>
+<p>Now that you have created a security group for the App subnet and edited the inbound and outbound rules to allow traffic from anywhere, you can start launching application servers in the App subnet. The application servers will be able to receive traffic from anywhere on the internet.</p>
+<hr>
+<p>now what????</p>
+<h3 id="-create-a-machine-inside-the-app-subnet-"><strong>Create a Machine Inside the App Subnet</strong></h3>
+<p>To create a machine inside the App subnet:</p>
+<ol>
+<li><p>Search for <strong>EC2</strong> in the search bar and select the <strong>EC2</strong> service.</p>
+</li>
+<li><p>Click on the <strong>Launch Instance</strong> button.</p>
+</li>
+<li><p>Under <strong>Choose an Amazon Machine Image (AMI)</strong>, select the AMI for the <strong>Ubuntu</strong> operating system.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695975369165/87a4facd-a52f-4bb0-9c1d-5e43c6d240aa.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Under <strong>Instance type</strong>, select the <strong>t2.micro</strong> instance type.</p>
+</li>
+<li><p>Under <strong>Key pair</strong>, select the key pair that you created in a previous step.</p>
+</li>
+<li><p>Under <strong>Network settings</strong>, select the VPC that you created in a previous step.</p>
+</li>
+<li><p>Under <strong>Subnet</strong>, select the App subnet.</p>
+</li>
+<li><p>Disable <strong>Auto-assign public IP</strong>. This will ensure that the PrivateInstance machine does not have a public IP address.</p>
+</li>
+<li><p>Under <strong>Firewall</strong>, select <strong>Select existing security group</strong>.</p>
+</li>
+<li><p>Select the <strong>App SG</strong> security group from the common security groups menu.</p>
+</li>
+<li><p>Click on the <strong>Launch Instance</strong> button.</p>
+</li>
+</ol>
+<p>This will launch a PrivateInstance machine in the App subnet.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695975459960/c217fc7e-2de3-48a1-abbb-18aa034855e5.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p><strong>Why Disable Auto Assign Public IP?</strong></p>
+<p>We disable the <strong>Auto-assign public IP</strong> because the PrivateInstance machine does not need to be accessible from the internet. The PrivateInstance machine will communicate with the internet through the PublicInstance instance, which is acting as a NAT gateway.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1695975292844/07444bf0-d2a2-4f8f-9920-48ef5b184c76.png?auto=compress,format&amp;format=webp" alt=""></p>
+<hr>
+<h3 id="so-does-the-machine-in-our-border-subnet-publicinstance-will-act-as-a-nat-gateway-">So, does the machine in our Border Subnet &#39;PublicInstance&#39; will act as a NAT gateway?</h3>
+<p>Simple answer: NO, नहीं, না, కాదు, இல்லை, ಇಲ್ಲ, ਨਹੀਂ , નહિં, नाही, ഇല്ല</p>
+<p>To make this happen we need to make sure a few things are enabled and are in the right place.</p>
+<p>The machine in the Border Subnet &#39;PublicInstance&#39; will act as a NAT gateway once you run the following commands:</p>
+<p>Note: You need to run these commands on &#39;PublicInstance&#39;, make sure you SSH login to the &#39;PublicInstace&#39; and execute these commands.</p>
+<pre><code>echo <span class="hljs-number">1</span> | sudo tee /<span class="hljs-keyword">proc</span>/sys/net/ipv4/conf/all/forwarding<span class="hljs-title">
+sudo</span> iptables -t<span class="hljs-title"> nat</span> -A<span class="hljs-title"> POSTROUTING</span> -o<span class="hljs-title"> eth0</span> -j<span class="hljs-title"> MASQUERADE</span>
+</code></pre><p><strong>What do these commands do?</strong></p>
+<p>The first command enables IP forwarding on the PublicInstance machine. This allows the PublicInstance machine to forward traffic between its network interfaces.</p>
+<p>The second command creates a NAT rule that tells the PublicInstance machine to masquerade all outgoing traffic from its eth0 interface. This means that the PublicInstance machine will use its public IP address for all outgoing traffic, regardless of the IP address of the device that originated the traffic.</p>
+<p><strong>How does this make the PublicInstance machine a NAT gateway?</strong></p>
+<p>When a device in the App subnet sends traffic to the internet, the traffic is first routed to the PublicInstance machine. The PublicInstance machine then forwards the traffic to the internet using its public IP address. The response traffic from the internet is routed back to the PublicInstance machine, which then forwards it to the device in the App subnet that originated the request.</p>
+<p><strong>Why is this important?</strong></p>
+<p>NAT gateways allow multiple devices on a local network to share a single public IP address for outbound traffic. This is important because public IP addresses are a limited resource. By using a NAT gateway, multiple devices on a local network can access the internet without each device needing its public IP address.</p>
+<hr>
+<p>Are we done now?</p>
+<p>Hmmmm, not yet. not done yet. You may ask &quot;Bruhh frrr??? WHYYYYY?&quot;</p>
+<p>because, To connect to the PrivateInstance machine using the PublicInstance machine, you need to edit your SSH configuration file. This file is located in the <code>.ssh</code> directory in your home directory.</p>
+<p>To edit the SSH configuration file, open a terminal window and navigate to the <code>.ssh</code> directory:</p>
+<pre><code><span class="hljs-built_in">cd</span> ~/.ssh
+</code></pre><p>Then, open the <code>config</code> file in a text editor:</p>
+<pre><code>nano <span class="hljs-built_in">config</span>
+</code></pre><p>Add the following two Host entries to the <code>config</code> file:</p>
+<pre><code><span class="hljs-attribute">Host</span> PublicInstance
+  HostName <span class="hljs-number">54.67.28.52</span>
+  ForwardAgent <span class="hljs-literal">yes</span>
+  User ubuntu
+  StrictHostKeyChecking <span class="hljs-literal">no</span>
+  IdentityFile ~/.ssh/id_rsa
+
+Host <span class="hljs-number">10.0.10.114</span>
+  ProxyCommand ssh -q -W %h:%p PublicInstance
+  ForwardAgent <span class="hljs-literal">yes</span>
+  StrictHostKeyChecking <span class="hljs-literal">no</span>
+  IdentityFile ~/.ssh/id_rsa
+  User ubuntu
+</code></pre><p><strong>Replace the following values (enter your machine IP addresses):</strong></p>
+<ul>
+<li><p><code>34.214.170.91</code> with the public IP address of the PublicInstance machine.</p>
+</li>
+<li><p><code>10.0.10.41</code> with the private IP address of the PrivateInstance machine.</p>
+</li>
+</ul>
+<p><strong>Save and close the</strong> <code>config</code> file.</p>
+<p>Now, you can connect to the PrivateInstance machine using the following command:</p>
+<pre><code><span class="hljs-attribute">ssh</span> ubuntu<span class="hljs-variable">@PrivateInstance</span>
+</code></pre><p>This command will use the SSH configuration file to connect to the PrivateInstance machine through the PublicInstance machine.</p>
+<p><strong>Explanation of the Host entries</strong></p>
+<p>The Host entry for the PublicInstance machine is fairly straightforward. It specifies the hostname, username, and SSH private key file to use to connect to the PublicInstance machine.</p>
+<p>The Host entry for the PrivateInstance machine is a bit more complicated. It uses the ProxyCommand directive to specify that all SSH traffic to the PrivateInstance machine should be routed through the PublicInstance machine. The <code>-q</code> option to the <code>ssh</code> command tells the <code>ssh</code> client to suppress all output. The <code>-W %h:%p</code> option tells the <code>SSH</code> client to forward all traffic on the specified port to the specified host.</p>
+<p><strong>Example</strong></p>
+<p>The following example shows how to connect to the PrivateInstance machine using the PublicInstance machine:</p>
+<pre><code><span class="hljs-attribute">ssh</span> ubuntu<span class="hljs-variable">@PrivateInstance</span>
+</code></pre><p>This will prompt you to enter the SSH private key for the PublicInstance machine. Once you have entered the SSH private key, you will be connected to the PrivateInstance machine.</p>
+<p>This process is called <strong><em>SSH hopping</em></strong></p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1696055467374/bb7682aa-6a42-4372-b234-bfc23854fd8b.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p>You can see in the above image that through the magic of SSH hopping.</p>
+<p>we connected to our PrivateInstance, even though it had no public IP address.</p>
+<hr>
+<h2 id="vpc-final-boss">VPC Final Boss</h2>
+<p>Can our PrivateInstance connect to the internet through our NAT gateway, which is our PublicInstance? Not yet. We can run commands like ping or apt-get update, but we won&#39;t see any results.</p>
+<p>To make it work we need to disable a source/destination check on your PublicInstance:</p>
+<ol>
+<li><p>Go to the <strong>Instances</strong> page in the AWS Management Console.</p>
+</li>
+<li><p>Select your PublicInstance.</p>
+</li>
+<li><p>Click on <strong>Actions</strong>.</p>
+</li>
+<li><p>From the drop-down menu, select <strong>Network Settings</strong>.</p>
+</li>
+<li><p>Click on <strong>Change source/destination check</strong>.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1696056336344/72e8b44e-c602-4489-a571-f0a3b2f483d6.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Select the <strong>Stop</strong> checkbox if it is unchecked from the pop-up window.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1696056367734/2cc07926-b54d-426e-b126-37444f09b865.png?auto=compress,format&amp;format=webp" alt=""></p>
+</li>
+<li><p>Click <strong>Save</strong>.</p>
+</li>
+</ol>
+<p>Now let&#39;s connect and run the ping command on our PrivateInstance if it can access the Internet via NAT</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1696055467374/bb7682aa-6a42-4372-b234-bfc23854fd8b.png" alt=""></p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1696056531075/b04b1e15-d4fa-4ff8-947b-6acba3a2d67f.png?auto=compress,format&amp;format=webp" alt=""></p>
+<p><strong>Voilà, Boom, Huzzah, ¡Olé!, Bravo, C&#39;est magnifique, Aha, Yippee, Fantástico, Kapow!</strong></p>
+<p><strong>WE DID ITT!!!!</strong></p>
+<p>We&#39;ve done it! We can now access the internet from our private machines via NAT. Feeling like a tech genius? Feeling like a Cloud Genius? Feeling like LV Nilesh Ji? Hold your horses. What if I told you that you could automate the entire process using <a href="https://github.com/beacloudgenius/ntier">Terraform</a>, which would create all of these resources for you in minutes?</p>
+<p>Don&#39;t feel dumb. You&#39;ve just learned the underlying concepts of cloud networking fundamentals, such as VPCs, subnets, route tables, and security groups. Even if you just completed the exercise and have a basic understanding of how things work, you&#39;ve accomplished a lot. See you next blog!</p>
